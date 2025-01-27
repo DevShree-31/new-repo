@@ -8,4 +8,5 @@ const router = express.Router();
 router.post('/patient',verifyToken,patientController.createPatient)
 router.get('/patient',verifyToken,patientController.getAllPatients)
 router.get('/patient/:id',verifyToken,patientController.getPatientById)
+router.patch('/patient/:id',verifyToken,patientController.updatePatientById)
 module.exports = router;

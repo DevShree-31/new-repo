@@ -74,10 +74,43 @@ async function getPatientById(req,res){
           } else {
             console.error('Error: while', error);
           }
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error while getting atient by id")
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error while getting patient by id")
     }
 }
 async function updatePatientById(req,res){
-    
+    try {
+        const id=req.params.id
+        const {email}=req.user
+        const updateData=req.body
+        const patient=await db.Patients.findOne({
+            where:{id}
+        })
+
+        if(!patient){
+            return res.status(StatusCodes.BAD_REQUEST).json("Patient id not found")
+        }
+        if(patient.email!=email){
+            return res.status(StatusCodes.UNAUTHORIZED).json("Unauthorized access to update")
+        }
+         const [updated] = await db.Patients.update(updateData, { where: {id} });
+         if(updated){
+            const updatedPatients = await db.Patients.findOne({ where: { id} });
+      return res.status(StatusCodes.OK).json(updatedPatients); // Return the updated user data
+         }
+         else{
+            return res.status(StatusCodes.NOT_FOUND).json({ error: 'User not found or no changes made' });
+         }
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            // Handle validation errors
+            console.error('Validation Errors:');
+            error.errors.forEach((err) => {
+              console.error(`${err.path}: ${err.message}`);
+            });
+          } else {
+            console.error('Error: while', error);
+          }
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error while getting patient by id")
+    }
 }
-module.exports={createPatient,getAllPatients,getPatientById}
+module.exports={createPatient,getAllPatients,getPatientById,updatePatientById}
