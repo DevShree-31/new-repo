@@ -19,7 +19,7 @@ module.exports = {
         unique:true
       },
       number: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull:false,
         validate:{
           is: {
@@ -29,7 +29,7 @@ module.exports = {
         }
       },
       gender: {
-        type: Sequelize.CHAR,
+        type: Sequelize.STRING,
         allowNull:false
       },
       createdAt: {

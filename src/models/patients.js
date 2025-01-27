@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       unique:true
     },
     number: {
-      type:DataTypes.INTEGER,
+      type:DataTypes.BIGINT,
       validate:{
         is: {
           args: /^[6-9]\d{9}$/, // Mobile number should start with 6-9 and followed by 9 digits
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false
     },
     gender: {
-      type:DataTypes.CHAR,
+      type:DataTypes.STRING,
       allowNull:false,
     }
   }, {
