@@ -113,4 +113,37 @@ async function updatePatientById(req,res){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error while getting patient by id")
     }
 }
-module.exports={createPatient,getAllPatients,getPatientById,updatePatientById}
+async function deletePatientById(req,res){
+  try {
+    const id=req.params.id
+        const {email}=req.user
+        const patient=await db.Patients.findOne({
+            where:{id}
+        })
+        if(!patient){
+          return res.status(StatusCodes.BAD_REQUEST).json("Patient id not found")
+      }
+      if(patient.email!=email){
+          return res.status(StatusCodes.UNAUTHORIZED).json("Unauthorized access to update")
+      }
+      const deletePatient=await db.Patients.destroy({
+        where:{id}
+      })
+      return res.status(StatusCodes.ACCEPTED).json({
+        message:"Patient deleted successfully",
+        content:deletePatient
+      })
+  } catch (error) {
+    if (error instanceof ValidationError) {
+        // Handle validation errors
+        console.error('Validation Errors:');
+        error.errors.forEach((err) => {
+          console.error(`${err.path}: ${err.message}`);
+        });
+      } else {
+        console.error('Error: while', error);
+      }
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("Cannot delete patient with the given id")
+}
+}
+module.exports={createPatient,getAllPatients,getPatientById,updatePatientById,deletePatientById}
