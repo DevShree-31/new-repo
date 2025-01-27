@@ -62,7 +62,7 @@ async function signIn(req,res){
     if(!verifyPassword){
         return res.status(StatusCodes.NOT_FOUND).json('Incorrect password')
     }
-    const token=jwt.sign({id:user.roleId},process.env.JWT_SECRET,{
+    const token=jwt.sign({id:user.roleId,email:user.email},process.env.JWT_SECRET,{
         expiresIn: process.env.JWT_REFRESH_EXPIRATION})
         return res.status(StatusCodes.OK).json({
             id: user.id,
