@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/patient',verifyToken,patientController.createPatient)
 router.get('/patient',verifyToken,patientController.getAllPatients)
-router.get('/patient/:id',verifyToken,patientController.getPatientById)
-router.patch('/patient/:id',verifyToken,patientController.updatePatientById)
-router.delete('/patient/:id',verifyToken,patientController.deletePatientById)
+router.get('/patient/:email',verifyToken,patientController.getPatientById)
+router.patch('/patient/:email',verifyToken,patientController.updatePatientById)
+router.delete('/patient/:email',verifyToken,patientController.deletePatientById)
 module.exports = router;

@@ -79,22 +79,22 @@ async function getPatientById(req,res){
 }
 async function updatePatientById(req,res){
     try {
-        const id=req.params.id
+        const userEmail=req.params.email
         const {email}=req.user
         const updateData=req.body
         const patient=await db.Patients.findOne({
-            where:{id}
+            where:{email}
         })
 
         if(!patient){
-            return res.status(StatusCodes.BAD_REQUEST).json("Patient id not found")
+            return res.status(StatusCodes.BAD_REQUEST).json("Patient email not found")
         }
         if(patient.email!=email){
             return res.status(StatusCodes.UNAUTHORIZED).json("Unauthorized access to update")
         }
-         const [updated] = await db.Patients.update(updateData, { where: {id} });
+         const [updated] = await db.Patients.update(updateData, { where: {email} });
          if(updated){
-            const updatedPatients = await db.Patients.findOne({ where: { id} });
+            const updatedPatients = await db.Patients.findOne({ where: { email} });
       return res.status(StatusCodes.OK).json(updatedPatients); // Return the updated user data
          }
          else{
@@ -115,19 +115,19 @@ async function updatePatientById(req,res){
 }
 async function deletePatientById(req,res){
   try {
-    const id=req.params.id
-        const {email}=req.user
+    const userEmail=req.params.email
+    const {email}=req.user
         const patient=await db.Patients.findOne({
-            where:{id}
+            where:{email}
         })
         if(!patient){
-          return res.status(StatusCodes.BAD_REQUEST).json("Patient id not found")
+          return res.status(StatusCodes.BAD_REQUEST).json("Patient  not found")
       }
       if(patient.email!=email){
           return res.status(StatusCodes.UNAUTHORIZED).json("Unauthorized access to update")
       }
       const deletePatient=await db.Patients.destroy({
-        where:{id}
+        where:{email}
       })
       return res.status(StatusCodes.ACCEPTED).json({
         message:"Patient deleted successfully",

@@ -5,7 +5,8 @@ const { ValidationError } = require('sequelize');
 function verifyToken(req, res, next) {
   // Get the token from the Authorization header
   const authHeader = req.headers['authorization'];
-
+  console.log(authHeader,"auth");
+  
   if (!authHeader) {
     return res.status(401).json({ message: 'Authorization header missing' });
   }
